@@ -1,0 +1,52 @@
+    check_execution 0 "Failed to set up frontend."
+# Create HTML file for FrontEnd
+cat <<EOL > index.html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Submit Info</title>
+    <script>
+        function submitForm() {
+            const formData = {
+                firstName: document.getElementById('firstName').value,
+                lastName: document.getElementById('lastName').value,
+                dob: document.getElementById('dob').value,
+                emailAddress: document.getElementById('emailAddress').value
+            };
+
+            fetch('http://localhost:9090/v1/aboutYou', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(formData)
+            })
+            .then(response => response.text())
+            .then(data => {
+                alert(data);
+            })
+            .catch(error => console.error('Error:', error));
+        }
+    </script>
+</head>
+<body>
+    <h1>Submit Your Information</h1>
+    <form onsubmit="event.preventDefault(); submitForm();">
+        <label for="firstName">First Name:</label><br>
+        <input type="text" id="firstName" name="firstName"><br><br>
+
+        <label for="lastName">Last Name:</label><br>
+        <input type="text" id="lastName" name="lastName"><br><br>
+
+        <label for="dob">Date of Birth:</label><br>
+        <input type="date" id="dob" name="dob"><br><br>
+
+        <label for="emailAddress">Email Address:</label><br>
+        <input type="email" id="emailAddress" name="emailAddress"><br><br>
+
+        <button type="submit">Submit</button>
+    </form>
+</body>
+</html>
